@@ -1,0 +1,59 @@
+parameters:
+    rates.url: 'https://api.exchangeratesapi.io/latest?access_key=%exchange.rates.api.key%'
+    binlist.base_url: 'https://lookup.binlist.net/'
+    fee_rates.eu: 0.01
+    fee_rates.non_eu: 0.02
+
+services:
+    cache.app:
+        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
+        arguments:
+            $namespace: 'app_cache'
+            $defaultLifetime: 3600
+            $directory: '%project.dir%/var/cache'
+
+
+    Symfony\Contracts\HttpClient\HttpClientInterface:
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+
+    App\Service\WebClientService:
+        arguments:
+            $client: '@Symfony\Contracts\HttpClient\HttpClientInterface'
+
+    App\Interface\WebClientInterface: '@App\Service\WebClientService'
+
+    App\Service\FileReaderService:
+        arguments: []
+
+    App\Interface\FileReaderInterface: '@App\Service\FileReaderService'
+    App\Interface\BinLookupInterface: '@App\Service\BinLookupService'
+    App\Interface\ExchangeRatesInterface: '@App\Service\ExchangeRatesService'
+    App\Interface\FeeCalculatorInterface: '@App\Service\FeeCalculatorService'
+
+    App\Service\BinLookupService:
+        arguments:
+            $webClient: '@App\Interface\WebClientInterface'
+            $apiUrl: '%binlist.base_url%'
+            $cache: '@cache.app'
+            $cacheLifetime: 86400
+
+    App\Service\ExchangeRatesService:
+        arguments:
+            $webClient: '@App\Interface\WebClientInterface'
+            $apiUrl: '%rates.url%'
+            $cache: '@cache.app'
+            $cacheLifetime: 3600
+
+    App\Service\FeeCalculatorService:
+        arguments:
+            $euFeeRate: '%fee_rates.eu%'
+            $nonEuFeeRate: '%fee_rates.non_eu%'
+
+    App\Command\ProcessFileCommand:
+        public: true
+        arguments:
+            $fileReader: '@App\Interface\FileReaderInterface'
+            $binLookupService: '@App\Interface\BinLookupInterface'
+            $exchangeRatesService: '@App\Interface\ExchangeRatesInterface'
+            $feeCalculator: '@App\Interface\FeeCalculatorInterface'
+

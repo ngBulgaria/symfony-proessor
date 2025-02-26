@@ -1,0 +1,54 @@
+### Symfony ###
+.env
+.env.*.local
+/.env.local
+/.env.test.local
+
+/vendor/
+/var/
+/public/build/
+
+### Composer ###
+composer.phar
+
+### PHPStorm IDE ###
+.idea/
+
+### VS Code IDE ###
+.vscode/
+
+### NetBeans IDE ###
+nbproject/
+
+### Sublime Text ###
+*.sublime-project
+*.sublime-workspace
+
+### Mac System files ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Windows System files ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+### Linux System files ###
+*~
+
+### Logs and backups ###
+*.log
+*.bak
+*.backup
+
+### Cache files ###
+*.cache
+
+### PHPUnit ###
+.phpunit.result.cache
+
+### Node / Yarn ###
+/node_modules/
+yarn-error.log
