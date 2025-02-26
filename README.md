@@ -5,7 +5,7 @@ This is a Symfony Console application that processes transactions from a file, f
 ## Installation
 
 1. Clone the repository:
-   git clone https://github.com/ngBulgaria/symfony-proessor/symfony-processor.git
+   git clone https://github.com/ngBulgaria/symfony-proessor.git
    cd symfony-processor
 
 2. Install dependencies:
